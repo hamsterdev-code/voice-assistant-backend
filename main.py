@@ -16,26 +16,12 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Lifecycle events: startup and shutdown"""
-    # Startup
-    logger.info("🚀 Starting Voice Assistant Backend...")
-    logger.info(f"📊 Database: {settings.database_url}")
-    logger.info("✅ SQLite database initialized")
-    
-    yield
-    
-    # Shutdown
-    logger.info("👋 Shutting down Voice Assistant Backend...")
-
 
 # Создаём FastAPI приложение
 app = FastAPI(
     title="Voice Assistant API",
     description="AI-powered voice assistant for cargo drivers",
     version="2.0.0",
-    lifespan=lifespan
 )
 
 # CORS middleware (должен быть ПЕРЕД роутами!)
@@ -53,7 +39,7 @@ app.include_router(router)
 
 
 @app.get("/")
-async def root():
+def root():
     """Health check endpoint"""
     return {
         "status": "ok",
@@ -64,7 +50,7 @@ async def root():
 
 
 @app.get("/health")
-async def health():
+def health():
     """Detailed health check"""
     return {
         "status": "ok",

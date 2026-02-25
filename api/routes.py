@@ -29,7 +29,7 @@ def get_db():
 
 
 @router.post("/process", response_model=ProcessMessageResponse)
-async def process_message(request: ProcessMessageRequest, db: Session = Depends(get_db)):
+def process_message(request: ProcessMessageRequest, db: Session = Depends(get_db)):
     """
     Обработать текстовое сообщение через AI
     При первом запросе автоматически создается новый пользователь
@@ -49,7 +49,7 @@ async def process_message(request: ProcessMessageRequest, db: Session = Depends(
             )
         
         # Обрабатываем сообщение через AI
-        response_text, action = await ai_service.process_message(
+        response_text, action = ai_service.process_message(
             db=db,
             user_id=request.user_id,
             message=request.message,
@@ -76,7 +76,7 @@ async def process_message(request: ProcessMessageRequest, db: Session = Depends(
 
 
 @router.get("/history/{user_id}")
-async def get_full_history(user_id: str, db: Session = Depends(get_db)):
+def get_full_history(user_id: str, db: Session = Depends(get_db)):
     """
     Получить полную историю разговора пользователя
     """
@@ -90,7 +90,7 @@ async def get_full_history(user_id: str, db: Session = Depends(get_db)):
 
 
 @router.post("/payment", response_model=PaymentResponse)
-async def process_payment(request: PaymentRequest, db: Session = Depends(get_db)):
+def process_payment(request: PaymentRequest, db: Session = Depends(get_db)):
     """
     Обработать оплату доступа
     
@@ -116,7 +116,7 @@ async def process_payment(request: PaymentRequest, db: Session = Depends(get_db)
 
 
 @router.get("/database/download")
-async def download_database():
+def download_database():
     """
     Скачать полную базу данных voice_assistant.db (все диалоги, пользователи).
     """
@@ -136,7 +136,7 @@ async def download_database():
 
 
 @router.delete("/conversation/{user_id}")
-async def clear_conversation(user_id: str, db: Session = Depends(get_db)):
+def clear_conversation(user_id: str, db: Session = Depends(get_db)):
     """
     Очистить историю разговора пользователя
     """

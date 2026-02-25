@@ -1,4 +1,4 @@
-from openai import AsyncOpenAI
+from openai import OpenAI
 from config.settings import settings
 from models.prompts import get_system_prompt, get_analysis_prompt
 from models.schemas import AiAction, CargoSearchParams, ServiceRecommendation, CargoAnalysis
@@ -16,12 +16,12 @@ class AiService:
     """Сервис для работы с AI (GPT-4) через BotHub"""
     
     def __init__(self):
-        self.client = AsyncOpenAI(
+        self.client = OpenAI(
             api_key=settings.bothub_api_key,
             base_url=settings.bothub_base_url
         )
     
-    async def process_message(
+    def process_message(
         self,
         db: Session,
         user_id: str,
@@ -69,7 +69,7 @@ class AiService:
             logger.info(f"Отправляем запрос к GPT-4 для пользователя {user_id}")
             
             # Вызываем GPT-4
-            response = await self.client.chat.completions.create(
+            response = self.client.chat.completions.create(
                 model="gpt-4o-mini",  # Используем gpt-4o-mini (быстрая модель)
                 messages=messages,
                 temperature=0.7,
@@ -163,7 +163,7 @@ class AiService:
             logger.error(f"Ошибка парсинга действия: {e}")
             return None
     
-    async def analyze_cargo_results(
+    def analyze_cargo_results(
         self,
         user_id: str,
         cargo_results: list
@@ -187,8 +187,8 @@ class AiService:
                 {"role": "user", "content": analysis_prompt}
             ]
             
-            # Вызываем GPT-4
-            response = await self.client.chat.completions.create(
+            # Вызываем GPT-4 (синхронно)
+            response = self.client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=messages,
                 temperature=0.5,
