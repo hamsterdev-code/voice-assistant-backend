@@ -1,4 +1,4 @@
-"""Старт сервера для платформ без Dockerfile (Railway, Render, Heroku и т.д.)"""
+"""Старт сервера для платформ без Dockerfile (Timeweb, Railway, Render и т.д.)"""
 import os
 import uvicorn
 
