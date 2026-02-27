@@ -241,11 +241,18 @@ def get_system_prompt() -> str:
   "action": {{
     "type": "search_cargo" | "open_service" | "request_callback" | "analyze_results" | "chat",
     "parameters": {{...}},
-    "cargo_search_params": {{...}},  // Если тип search_cargo
-    "service_recommendation": {{...}},  // Если тип open_service
-    "cargo_analysis": {{...}}  // Если тип analyze_results
+    "cargo_search_params": {{
+      "source": "Город отправки",
+      "target": "Город доставки",
+      "date_start": "YYYY-MM-DD",
+      "date_end": "YYYY-MM-DD или null"
+    }},
+    "service_recommendation": {{...}},
+    "cargo_analysis": {{...}}
   }}
 }}
+
+ОБЯЗАТЕЛЬНО для search_cargo: если водитель сказал "завтра", "сегодня", "послезавтра" или конкретную дату — заполни date_start (и date_end при диапазоне). Пример: "на завтра" → date_start: "{tomorrow}", date_end: "{tomorrow}".
 
 🧠 КОНТЕКСТ РАЗГОВОРА:
 Ты помнишь историю разговора и можешь использовать предыдущие сообщения.
